@@ -23,9 +23,3 @@ def create_and_save_plot(data, ticker, period, filename=None):
     plt.xlabel("Дата")
     plt.ylabel("Цена")
     plt.legend()
-
-    # if filename is None:
-    #     filename = f"{ticker}_{period}_stock_price_chart.png"
-    #
-    # plt.savefig(filename)
-    # print(f"График сохранен как {filename}")
