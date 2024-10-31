@@ -34,3 +34,8 @@ def notify_if_strong_fluctuations(data, threshold):
     if percentage_difference > threshold:
         logging.info(f'Значение колебаний: {percentage_difference}')
         print(f'Превышен порог цен -{percentage_difference}, допустимое значение -{threshold}')
+
+def export_data_to_csv(data, filename):
+    logging.info(f'Экспорт данных в файл {filename}')
+    data.to_csv(filename)
+    logging.info(f'данные успешно сохранены в файл {filename}')
