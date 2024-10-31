@@ -25,6 +25,8 @@ def main():
 
     dd.notify_if_strong_fluctuations(stock_data, threshold)
 
+    dd.export_data_to_csv(stock_data, "dataframe.csv'")
+
 
 
 if __name__ == "__main__":
