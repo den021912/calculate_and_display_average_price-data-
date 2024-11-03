@@ -1,6 +1,6 @@
 import yfinance as yf
 import logging
-
+from fileinput import filename
 
 def fetch_stock_data(ticker, period='1mo'):
     stock = yf.Ticker(ticker)
@@ -10,6 +10,25 @@ def fetch_stock_data(ticker, period='1mo'):
 
 def add_moving_average(data, window_size=5):
     data['Moving_Average'] = data['Close'].rolling(window=window_size).mean()
+    return data
+
+def calculate_rsi(data, window=14):
+    logging.info(f"Расчет RSI с размером окна {window}")
+    delta = data['Close'].diff()
+    gain = (delta.where(delta > 0, 0)).rolling(window=window).mean()
+    loss = (-delta.where(delta < 0, 0)).rolling(window=window).mean()
+    rs = gain / loss
+    data['RSI'] = 100 - (100 / (1 + rs))
+    logging.info("RSI успешно рассчитан")
+    return data
+
+def calculate_macd(data, short_window=12, long_window=26, signal_window=9):
+    logging.info(f"Расчет MACD с коротким окном {short_window}, длинным окном {long_window} и сигнальным окном {signal_window}")
+    data['EMA_short'] = data['Close'].ewm(span=short_window, adjust=False).mean()
+    data['EMA_long'] = data['Close'].ewm(span=long_window, adjust=False).mean()
+    data['MACD'] = data['EMA_short'] - data['EMA_long']
+    data['Signal'] = data['MACD'].ewm(span=signal_window, adjust=False).mean()
+    logging.info("MACD успешно рассчитан")
     return data
 
 def calculate_and_display_average_price(data):
@@ -39,3 +58,4 @@ def export_data_to_csv(data, filename):
     logging.info(f'Экспорт данных в файл {filename}')
     data.to_csv(filename)
     logging.info(f'данные успешно сохранены в файл {filename}')
+
