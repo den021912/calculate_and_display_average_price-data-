@@ -1,8 +1,9 @@
 import matplotlib.pyplot as plt
 import pandas as pd
+import logging
 
 
-def create_and_save_plot(data, ticker):
+def create_and_save_plot(data, ticker, period, filename=None):
     plt.figure(figsize=(10, 6))
 
     if 'Date' not in data:
@@ -23,3 +24,25 @@ def create_and_save_plot(data, ticker):
     plt.xlabel("Дата")
     plt.ylabel("Цена")
     plt.legend()
+
+    if 'RSI' in data.columns:
+        plt.plot(data.index, data['RSI'], label='RSI')
+        plt.title('Relative Strength Index (RSI)')
+        plt.xlabel("Дата")
+        plt.ylabel("RSI")
+        plt.legend()
+
+    if 'MACD' in data.columns and 'Signal' in data.columns:
+        plt.plot(data.index, data['MACD'], label='MACD')
+        plt.plot(data.index, data['Signal'], label='Signal')
+        plt.title('Moving Average Convergence Divergence (MACD)')
+        plt.xlabel("Дата")
+        plt.ylabel("MACD")
+        plt.legend()
+
+    if filename is None:
+        filename = f"{ticker}_{period}_stock_price_chart.png"
+
+    plt.savefig(filename)
+    logging.info(f"График сохранен как {filename}")
+    print(f"График сохранен как {filename}")
