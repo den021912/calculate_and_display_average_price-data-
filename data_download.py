@@ -2,14 +2,22 @@ import yfinance as yf
 import logging
 from fileinput import filename
 
-def fetch_stock_data(ticker, period='1mo'):
+def fetch_stock_data(ticker, period, start_date = None, end_date = None):
     stock = yf.Ticker(ticker)
-    data = stock.history(period=period)
-    return data
+    logging.info(f'Объект "Ticker" {stock}')
+    if period:
+        data = stock.history(period = period)
+        logging.info(f'Временной период с определенным интервалом {type(data)}')
+        return data
+    elif start_date and end_date:
+        data = stock.history(start = start_date, end = end_date)
+        logging.info(f'Временной период с заданным интервалом {type(data)}')
+        return data
+
 
 
 def add_moving_average(data, window_size=5):
-    data['Moving_Average'] = data['Close'].rolling(window=window_size).mean()
+    data['Moving_Average'] = data['Close'].rolling(window = window_size).mean()
     return data
 
 def calculate_rsi(data, window=14):
@@ -41,8 +49,8 @@ def calculate_and_display_average_price(data):
 def notify_if_strong_fluctuations(data, threshold):
     """ Уведомляет пользователя, если цена акций колебалась более чем на заданный процент за период. """
     list_prices_close = data['Close'].tolist()
-    max_price = max(list_prices_close)
-    min_price = min(list_prices_close)
+    max_price = data['Close'].max()
+    min_price = data['Close'].min()
     difference = max_price - min_price
     """Средняя цена и порог колебания цен в процентах:"""
     average_price = (max_price + min_price) / 2
