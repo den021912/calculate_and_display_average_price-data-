@@ -3,6 +3,8 @@ import logging
 from fileinput import filename
 
 def fetch_stock_data(ticker, period, start_date = None, end_date = None):
+    """ Получает исторические данные об акциях для указанного тикера и временного периода.
+     Возвращает DataFrame с данными. """
     stock = yf.Ticker(ticker)
     logging.info(f'Объект "Ticker" {stock}')
     if period:
@@ -17,10 +19,12 @@ def fetch_stock_data(ticker, period, start_date = None, end_date = None):
 
 
 def add_moving_average(data, window_size=5):
+     """ Добавляет в DataFrame колонку со скользящим средним, рассчитанным на основе цен закрытия."""
     data['Moving_Average'] = data['Close'].rolling(window = window_size).mean()
     return data
 
 def calculate_rsi(data, window=14):
+     """Добавляет и рассчитывает дополнительный технический индикатор RSI."""
     logging.info(f"Расчет RSI с размером окна {window}")
     delta = data['Close'].diff()
     gain = (delta.where(delta > 0, 0)).rolling(window=window).mean()
@@ -31,6 +35,7 @@ def calculate_rsi(data, window=14):
     return data
 
 def calculate_macd(data, short_window=12, long_window=26, signal_window=9):
+     """Добавляет и рассчитывает дополнительный технический индикатор MACD"""
     logging.info(f"Расчет MACD с коротким окном {short_window}, длинным окном {long_window} и сигнальным окном {signal_window}")
     data['EMA_short'] = data['Close'].ewm(span=short_window, adjust=False).mean()
     data['EMA_long'] = data['Close'].ewm(span=long_window, adjust=False).mean()
@@ -63,6 +68,7 @@ def notify_if_strong_fluctuations(data, threshold):
         print(f'Превышен порог цен -{percentage_difference}, допустимое значение -{threshold}')
 
 def export_data_to_csv(data, filename):
+    """ Сохранение данных в csv файл """
     logging.info(f'Экспорт данных в файл {filename}')
     data.to_csv(filename)
     logging.info(f'данные успешно сохранены в файл {filename}')
