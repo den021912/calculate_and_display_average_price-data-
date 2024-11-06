@@ -4,6 +4,8 @@ import logging
 
 
 def create_and_save_plot(data, ticker, period, filename=None):
+     """ Создаёт график, отображающий цены закрытия и скользящие средние. Отображает на графике дополнительные технические индикаторы  RSI и MACD.
+     Предоставляет возможность сохранения графика в файл. """
     plt.figure(figsize=(10, 6))
 
     if 'Date' not in data:
@@ -24,14 +26,14 @@ def create_and_save_plot(data, ticker, period, filename=None):
     plt.xlabel("Дата")
     plt.ylabel("Цена")
     plt.legend()
-
+ """ График RSI """
     if 'RSI' in data.columns:
         plt.plot(data.index, data['RSI'], label='RSI')
         plt.title('Relative Strength Index (RSI)')
         plt.xlabel("Дата")
         plt.ylabel("RSI")
         plt.legend()
-
+ """ График MACD """
     if 'MACD' in data.columns and 'Signal' in data.columns:
         plt.plot(data.index, data['MACD'], label='MACD')
         plt.plot(data.index, data['Signal'], label='Signal')
