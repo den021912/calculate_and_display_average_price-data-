@@ -11,6 +11,7 @@ def main():
     period = input("Введите период для данных (например, '1mo' для одного месяца): ")
     start = input("Введите дату начала анализа(yyyy-mm-dd):")
     end = input("Введите дату окончания для анализа данных(yyyy-mm-dd):")
+    style = input("Введите стиль оформления графика (например, 'ggplot', 'default'): ")
 
 
     # Fetch stock data
@@ -36,7 +37,7 @@ def main():
 
     dd.export_data_to_csv(stock_data, "dataframe.csv'")
 
-    dplt.create_and_save_plot(stock_data, ticker, period)
+    dplt.create_and_save_plot(stock_data, ticker, period, style = style)
 
 
 
