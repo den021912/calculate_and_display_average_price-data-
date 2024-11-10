@@ -39,6 +39,8 @@ def main():
 
     dplt.create_and_save_plot(stock_data, ticker, period, style = style)
 
+    #  Стандартное отклонение цены закрытия
+    dd.calculate_standard_deviation(stock_data, ticker)
 
 
 
