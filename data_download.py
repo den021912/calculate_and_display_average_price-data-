@@ -73,3 +73,9 @@ def export_data_to_csv(data, filename):
     data.to_csv(filename)
     logging.info(f'данные успешно сохранены в файл {filename}')
 
+def calculate_standard_deviation(data, ticker_symbol):
+    """ Рассчитывает стандартное отклонение цены закрытия. """
+    std_dev = data['Close'].std()
+    print(f"Стандартное отклонение цены закрытия {ticker_symbol}: {std_dev}")
+    logging.info(f'Стандартное отклонение цены закрытия {ticker_symbol}: {std_dev}')
+    return std_dev
