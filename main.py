@@ -42,6 +42,8 @@ def main():
     #  Стандартное отклонение цены закрытия
     dd.calculate_standard_deviation(stock_data, ticker)
 
+    # Интерактивный график
+    dd.average_value_column(stock_data, ticker)
 
 
 
