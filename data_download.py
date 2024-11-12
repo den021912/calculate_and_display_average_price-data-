@@ -3,8 +3,7 @@ import logging
 from fileinput import filename
 
 def fetch_stock_data(ticker, period, start_date = None, end_date = None):
-    """ Получает исторические данные об акциях для указанного тикера и временного периода.
-         Возвращает DataFrame с данными. """
+    """ Получает исторические данные об акциях для указанного тикера и временного периода. Возвращает DataFrame с данными. """
     stock = yf.Ticker(ticker)
     logging.info(f'Объект "Ticker" {stock}')
     if period:
@@ -15,8 +14,6 @@ def fetch_stock_data(ticker, period, start_date = None, end_date = None):
         data = stock.history(start = start_date, end = end_date)
         logging.info(f'Временной период с заданным интервалом {type(data)}')
         return data
-
-
 
 def add_moving_average(data, window_size=5):
     """ Добавляет в DataFrame колонку со скользящим средним, рассчитанным на основе цен закрытия."""
@@ -62,7 +59,6 @@ def notify_if_strong_fluctuations(data, threshold):
     threshold = difference / (average_price / 100)
     """Разница между максимальной и минимальной ценой в процентах."""
     percentage_difference = difference / min_price * 100
-
     if percentage_difference > threshold:
         logging.info(f'Значение колебаний: {percentage_difference}')
         print(f'Превышен порог цен -{percentage_difference}, допустимое значение -{threshold}')
