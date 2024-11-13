@@ -9,11 +9,9 @@ def create_and_save_plot(data, ticker, period, filename = None, style = input):
     if style not in plt.style.available:
         logging.warning(f"Стиль '{style}' не найден. Выберите другой стиль, пожалуйста.")
         style = input()
-
     """ Применяем выбранный стиль """
     plt.style.use(style)
     plt.figure(figsize = (10, 6))
-
     if 'Date' not in data:
         if pd.api.types.is_datetime64_any_dtype(data.index):
             dates = data.index.to_numpy()
@@ -27,7 +25,6 @@ def create_and_save_plot(data, ticker, period, filename = None, style = input):
             data['Date'] = pd.to_datetime(data['Date'])
         plt.plot(data['Date'], data['Close'], label = 'Close Price')
         plt.plot(data['Date'], data['Moving_Average'], label = 'Moving Average')
-
     plt.title(f"{ticker} Цена акций с течением времени")
     plt.xlabel("Дата")
     plt.ylabel("Цена")
@@ -47,10 +44,8 @@ def create_and_save_plot(data, ticker, period, filename = None, style = input):
         plt.xlabel("Дата")
         plt.ylabel("MACD")
         plt.legend()
-
     if filename is None:
         filename = f"{ticker}_{period}_stock_price_chart.png"
-
     plt.savefig(filename)
     logging.info(f"График сохранен как {filename}")
     print(f"График сохранен как {filename}")
