@@ -13,7 +13,6 @@ def main():
     end = input("Введите дату окончания для анализа данных(yyyy-mm-dd):")
     style = input("Введите стиль оформления графика (например, 'ggplot', 'default'): ")
 
-
     # Fetch stock data
     stock_data = dd.fetch_stock_data(ticker, period)
 
@@ -44,7 +43,6 @@ def main():
 
     # Интерактивный график
     dd.average_value_column(stock_data, ticker)
-
 
 
 if __name__ == "__main__":
