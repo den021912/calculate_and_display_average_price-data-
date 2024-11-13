@@ -2,8 +2,11 @@ import yfinance as yf
 import logging
 from fileinput import filename
 
+
 def fetch_stock_data(ticker, period, start_date = None, end_date = None):
-    """ Получает исторические данные об акциях для указанного тикера и временного периода. Возвращает DataFrame с данными. """
+    """ 
+    Получает исторические данные об акциях для указанного тикера и временного периода. Возвращает DataFrame с данными. 
+    """
     stock = yf.Ticker(ticker)
     logging.info(f'Объект "Ticker" {stock}')
     if period:
@@ -15,13 +18,19 @@ def fetch_stock_data(ticker, period, start_date = None, end_date = None):
         logging.info(f'Временной период с заданным интервалом {type(data)}')
         return data
 
+
 def add_moving_average(data, window_size=5):
-    """ Добавляет в DataFrame колонку со скользящим средним, рассчитанным на основе цен закрытия."""
+    """ 
+    Добавляет в DataFrame колонку со скользящим средним, рассчитанным на основе цен закрытия.
+    """
     data['Moving_Average'] = data['Close'].rolling(window = window_size).mean()
     return data
 
+
 def calculate_rsi(data, window=14):
-    """Добавляет и рассчитывает дополнительный технический индикатор RSI."""
+    """
+    Добавляет и рассчитывает дополнительный технический индикатор RSI.
+    """
     logging.info(f"Расчет RSI с размером окна {window}")
     delta = data['Close'].diff()
     gain = (delta.where(delta > 0, 0)).rolling(window=window).mean()
@@ -31,8 +40,11 @@ def calculate_rsi(data, window=14):
     logging.info("RSI успешно рассчитан")
     return data
 
+
 def calculate_macd(data, short_window=12, long_window=26, signal_window=9):
-    """Добавляет и рассчитывает дополнительный технический индикатор MACD"""
+    """
+    Добавляет и рассчитывает дополнительный технический индикатор MACD
+    """
     logging.info(f"Расчет MACD с коротким окном {short_window}, длинным окном {long_window} и сигнальным окном {signal_window}")
     data['EMA_short'] = data['Close'].ewm(span=short_window, adjust=False).mean()
     data['EMA_long'] = data['Close'].ewm(span=long_window, adjust=False).mean()
@@ -41,15 +53,21 @@ def calculate_macd(data, short_window=12, long_window=26, signal_window=9):
     logging.info("MACD успешно рассчитан")
     return data
 
+
 def calculate_and_display_average_price(data):
-    """Вычисляет и выводит среднюю цену закрытия акций за заданный период."""
+    """
+    Вычисляет и выводит среднюю цену закрытия акций за заданный период.
+    """
     average_price = data['Close'].mean(axis=0)
     logging.info(f'Выводится среднее значение колонки "Close": {average_price}')
     print(f'Среднее значение колонки "Close": {average_price}\n')
     return data
 
+
 def notify_if_strong_fluctuations(data, threshold):
-    """ Уведомляет пользователя, если цена акций колебалась более чем на заданный процент за период. """
+    """ 
+    Уведомляет пользователя, если цена акций колебалась более чем на заданный процент за период.
+    """
     list_prices_close = data['Close'].tolist()
     max_price = data['Close'].max()
     min_price = data['Close'].min()
@@ -63,18 +81,25 @@ def notify_if_strong_fluctuations(data, threshold):
         logging.info(f'Значение колебаний: {percentage_difference}')
         print(f'Превышен порог цен -{percentage_difference}, допустимое значение -{threshold}')
 
+
 def export_data_to_csv(data, filename):
-    """ Сохранение данных в csv файл """
+    """
+    Сохранение данных в csv файл 
+    """
     logging.info(f'Экспорт данных в файл {filename}')
     data.to_csv(filename)
     logging.info(f'данные успешно сохранены в файл {filename}')
 
+
 def calculate_standard_deviation(data, ticker_symbol):
-    """ Рассчитывает стандартное отклонение цены закрытия. """
+    """ 
+    Рассчитывает стандартное отклонение цены закрытия.
+    """
     std_dev = data['Close'].std()
     print(f"Стандартное отклонение цены закрытия {ticker_symbol}: {std_dev}")
     logging.info(f'Стандартное отклонение цены закрытия {ticker_symbol}: {std_dev}')
     return std_dev
+
 
 def average_value_column(stock_data, ticker):
     """Принимает DataFrame и вычисляет среднее значение колонки 'Close'. Результат  выводится в консоль."""
